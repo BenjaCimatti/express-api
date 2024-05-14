@@ -52,6 +52,24 @@ app.get("/eventos", async (req,res) => {
     }
 });
 
+app.delete("/eventos/:id", async (req,res) => {
+    try {
+        const idBorrar = req.params.id
+        const evento = await Evento.findOne({
+            where: {
+                id: idBorrar
+            }
+        })
+        await evento.destroy()
+        res.json(evento)
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        })
+    }
+})
+
 // Inicia el servidor
 inicializarBaseDeDatos().then(() => {
     app.listen(3000, () => console.log('Servidor corriendo en http://localhost:3000'));

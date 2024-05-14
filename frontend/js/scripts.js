@@ -3,6 +3,14 @@ async function getEventos() {
     return await eventos.json()
 }
 
+async function borrarEvento(id) {
+    await fetch(`http://localhost:3000/eventos/${id}`, {
+        method: "DELETE"
+    })
+    const eventos = await getEventos()
+    await cargarTabla(eventos)
+}
+
 async function cargarTabla(eventos) {
     tabla = document.getElementById("grilla-eventos")
     tabla.innerHTML = ""
@@ -16,6 +24,7 @@ async function cargarTabla(eventos) {
             <td scope="row">${evento.fechaFin}</td>
             <td scope="row">${evento.tipoAsistencia}</td>
             <td scope="row"><a href="${evento.enlace}">${evento.enlace}</a></td>
+            <td scope="row"><button onclick="borrarEvento(${evento.id})" type="button" class="btn btn-danger">Borrar</button></td>
         </tr>
         `
         tabla.innerHTML += row
@@ -27,6 +36,8 @@ const cargarEventos = async () => {
     document.addEventListener("DOMContentLoaded", async () => {
         const eventos = await getEventos()
         await cargarTabla(eventos)
+
+        
     })
 };
 cargarEventos();
